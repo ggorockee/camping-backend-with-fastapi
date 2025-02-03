@@ -1,0 +1,15 @@
+server:
+  profile: dev
+  port: 2500
+
+secret:
+  jwt: ""
+
+infra:
+  db:
+    user: 'root'
+    password: 'test123!@#'
+    host: 'localhost'
+    port: '3306'
+    dbName: 'test'
+    

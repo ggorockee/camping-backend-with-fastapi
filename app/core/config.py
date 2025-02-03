@@ -2,6 +2,7 @@ import os
 import yaml
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel
+from pydantic import Field
 
 
 class DBConfig(BaseModel):
@@ -25,16 +26,16 @@ class ServerConfig(BaseModel):
     port: int
 
 
-class Config(BaseModel):
-    server: ServerConfig
-    secret: SecretConfig
-    infra: InfraConfig
+class Settings(BaseSettings):
+    server: ServerConfig = Field(default_factory=ServerConfig)
+    secret: SecretConfig = Field(default_factory=SecretConfig)
+    infra: InfraConfig = Field(default_factory=InfraConfig)
 
-
-def load_config(file_path: str) -> Config:
-    with open(file_path, "r") as file:
-        yaml_data = yaml.safe_load(file)
-    return Config(**yaml_data)
+    @classmethod
+    def from_yaml(cls, yaml_file: str):
+        with open(yaml_file, "r") as file:
+            yaml_data = yaml.safe_load(file)
+        return cls(**yaml_data)
 
 
 print(os.path.dirname(os.path.abspath(__file__)) + "config.dev.yaml")
